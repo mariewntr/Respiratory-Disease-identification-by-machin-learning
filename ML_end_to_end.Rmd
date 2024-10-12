@@ -1,0 +1,88 @@
+---
+title: "Machine Learning end to end"
+author: "Marie Winter"
+date: "2024-10-12"
+output: html_document
+---
+
+  Objectives: Ce document est un projet de machine learning complet depuis l'exploration des données jusqu'au modèle et l'évaluation de ces performances. La question ici est peut-on prédire la prognostic du patient ? C'est donc un problème de classification. 
+  
+  Les données : ce set de données provient de Kaggle (https://www.kaggle.com/datasets/abbotpatcher/respiratory-symptoms-and-treatment). Les donnnées ont été collectées par le départment de santé public du nouveau-mexique (USA) pour identifier différente maladie respiratoire chronique présent dans cette état. Ce dataset contient plus de 3 700 patient avec une maladie respiratoire avec les informations suivantes : symptomes, sexe, maladie, traitement, la sévérité (nature). 
+
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Library et importation de la table de données
+```{r}
+#data management et exploration des données
+library(tidyverse)
+library(dplyr)
+
+#machine learning
+library(tidymodels)
+```
+
+```{r}
+df <- read.csv("C:/Users/marie/Desktop/ML_end_to_end/respiratory symptoms and treatment.csv") #nombre de lignes : 38 537
+```
+
+##Exploration des données
+Statistique descriptive de la table
+```{r}
+summary(df)
+```
+On observe que : 
+Seul la variable Age est au format numérique les autres sont un format string. 
+L'age contient 342 valeurs manquante sur les 38 537 lignes. La moyenne d'age est de 37 ans avec un minimum à 1 ans et un maximum à 98 ans. 
+
+Pour avoir plus d'information (valeur manquante, nombre de lignes pour chaque catégories) sur les variables au format string elle sont transformé au type factor.
+```{r}
+df2 <- df %>% transform(
+  Symptoms = as.factor(Symptoms),
+  Sex = as.factor(Sex),
+  Disease = as.factor(Disease),
+  Treatment = as.factor(Treatment),
+  Nature = as.factor(Nature)
+)
+
+summary(df2)
+```
+Pour la variable :
+- Symptoms il existe 7 catégories pour cette variable, le others correspond à des phrases décrivant les symptômes. 
+- Sex : 922 valeurs manquantes, 3 catégories (male, female et no to say). La majorité des lignes correspondent à male qui représente 55% des donées, les female 39% et les no to say 2%. 
+- Disease : Other son les catégories minoritaires de la table pour cette variable. 6 maladies majoritaires: la plus vue est la pneumonie (6144 lignes) et la moins vue est la bronchiolitis (2 650 lignes). 
+- Treatment : il existe de multiple catégories avec 6 catégories majoritaires dont une catégorie vide (certainement un espace). La plus vue est antibiotic qui est écrit de 2 façon (A et a). 
+- Nature : qui représente la sévérité de la maladie, 3 sévérité sont répertoriée (high, low, medium). Il existe aussi des catégories vide. 
+
+Pour conclure ici, cette table contient principalement des données catégoriel qu'il va falloir envisager d'encoder ou de transformer. Il y a de nombreuses valeurs manquante, il va falloir étudier les liens entre les variables pour voir comment et si il est possible de remplir ces données manquantes. 
+Pour notre problématique, la variable cible est disease. Il faut donc penser à encoder et/ou transformer les autres variables catégoriels. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
